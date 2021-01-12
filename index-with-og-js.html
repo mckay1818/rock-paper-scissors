@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Rock Paper Scissors</title>
+    <script>
+        const rps = ['rock', 'paper', 'scissors'];
+        let playerScore = 0;
+        let computerScore = 0;
+    
+    
+    //get computerSelection
+    function computerPlay() {
+        let computerSelection = rps[Math.floor(Math.random() * rps.length)];
+        console.log(computerSelection)
+        return computerSelection;
+    }
+    
+    //get playerSelection
+    function userPlay() {
+        let playerSelection = window.prompt('Choose your weapon! Rock, paper, or scissors.');
+        playerSelection = playerSelection.toLowerCase();
+        //validate playerSelection as rock, paper, or scissors
+        if (
+            (playerSelection == 'rock') ||
+            (playerSelection == 'paper') ||
+            (playerSelection == 'scissors')
+            ) {
+                return playerSelection;      
+        } else {
+            playerSelection = window.prompt('An invalid weapon was chosen. Please choose rock, paper, or scissors.');
+        }
+    }
+    
+    function playRound(playerSelection, computerSelection) {
+        //compare selections and return string that declares winner
+        if (playerSelection == computerSelection) {
+            return console.log(`It\'s a tie! Score is ${playerScore} to ${computerScore}.`);
+        } else if ((playerSelection == 'scissors' && computerSelection == 'paper') ||
+        (playerSelection == 'paper' && computerSelection == 'rock') ||
+        (playerSelection == 'rock' && computerSelection == 'scissors')) {
+            playerScore++;
+            return console.log(`You are victorious! ${playerSelection[0].toUpperCase()}${playerSelection.slice(1)} 
+                    beats ${computerSelection}. Score is ${playerScore} to ${computerScore}.`);
+            
+        } else {
+            computerScore++;
+            return console.log(`You lose. ${computerSelection[0].toUpperCase()}${computerSelection.slice(1)} 
+                    beats ${playerSelection}. Score is ${playerScore} to ${computerScore}.`);
+        }
+    }
+    
+    //create a 5 round game
+    function game() {
+        //run 5 rounds of playRound
+        for (let i = 0; i < 5; i++) {
+            computerSelection = computerPlay();
+            playerSelection = userPlay();
+            playRound(playerSelection, computerSelection);
+        }
+        
+        //declare final winner
+        if (playerScore > computerScore) {
+            return console.log('You win! Humanity lives to fight another day.');
+        } else {
+            return console.log('You lose! Who will save us from the computers now?')
+        }
+    }
+    
+    console.log(game());
+    
+    </script>
+
+</head>
+
+<body></body>
+
+</html>
