@@ -23,15 +23,23 @@
     function userPlay() {
         let playerSelection = window.prompt('Choose your weapon! Rock, paper, or scissors.');
         playerSelection = playerSelection.toLowerCase();
-        //validate playerSelection as rock, paper, or scissors
+        if (validatePlayerSelection(playerSelection) == 1) {
+            return playerSelection
+        } else {
+            userPlay();
+        }
+    }
+
+    function validatePlayerSelection(playerSelection) {
         if (
             (playerSelection == 'rock') ||
             (playerSelection == 'paper') ||
             (playerSelection == 'scissors')
             ) {
-                return playerSelection;      
+                return 1;      
         } else {
-            playerSelection = window.prompt('An invalid weapon was chosen. Please choose rock, paper, or scissors.');
+            window.prompt('An invalid weapon was selected. Choose more wisely.');
+            return 0;
         }
     }
     
@@ -43,13 +51,11 @@
         (playerSelection == 'paper' && computerSelection == 'rock') ||
         (playerSelection == 'rock' && computerSelection == 'scissors')) {
             playerScore++;
-            return console.log(`You are victorious! ${playerSelection[0].toUpperCase()}${playerSelection.slice(1)} 
-                    beats ${computerSelection}. Score is ${playerScore} to ${computerScore}.`);
+            return console.log(`You are victorious! ${playerSelection[0].toUpperCase()}${playerSelection.slice(1)} beats ${computerSelection}. Score is ${playerScore} to ${computerScore}.`);
             
         } else {
             computerScore++;
-            return console.log(`You lose. ${computerSelection[0].toUpperCase()}${computerSelection.slice(1)} 
-                    beats ${playerSelection}. Score is ${playerScore} to ${computerScore}.`);
+            return console.log(`You lose. ${computerSelection[0].toUpperCase()}${computerSelection.slice(1)} beats ${playerSelection}. Score is ${playerScore} to ${computerScore}.`);
         }
     }
     
@@ -59,7 +65,11 @@
         for (let i = 0; i < 5; i++) {
             computerSelection = computerPlay();
             playerSelection = userPlay();
+            if (playerSelection == 0) {
+                playerSelection = userPlay();
+            } else {
             playRound(playerSelection, computerSelection);
+            }
         }
         
         //declare final winner
