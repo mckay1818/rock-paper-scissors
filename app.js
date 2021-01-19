@@ -1,16 +1,16 @@
-//get reference to HTML body & buttons
-const container = document.querySelector('#container');
-const buttons = document.querySelectorAll('button');
+//get reference to HTML body & buttons, initialize score & declare game options
+const playerScore_span = document.getElementById('player-score');
+const computerScore_span = document.getElementById('computer-score');
+const buttons_div = document.querySelectorAll('button');
+const result_div = document.querySelector('#result');
+let playerScore = 0;
+let computerScore = 0;
 const rps = ['rock', 'paper', 'scissors'];
-let playerScore = document.getElementById('player-score').innerHTML;
-let computerScore = document.getElementById('computer-score').innerHTML;
-
 
 //initiate round via onclick listener
-buttons.forEach(button => {
+buttons_div.forEach(button => {
     button.addEventListener('click', () => {
         let playerSelection = button.getAttribute('id');
-        console.log(playerSelection);
         playRound(playerSelection);
     });
 });
@@ -24,29 +24,50 @@ function computerPlay() {
 }
 
 function playRound(playerSelection) {
-    //get computer selection
+    const playerSelection_div = document.getElementById(playerSelection);
     computerSelection = computerPlay();
     //compare selections and return string that declares winner
-    if (playerSelection == computerSelection) {
-        return console.log(`It\'s a tie! Score is ${playerScore} to ${computerScore}.`);
-    } else if ((playerSelection == 'scissors' && computerSelection == 'paper') ||
-    (playerSelection == 'paper' && computerSelection == 'rock') ||
-    (playerSelection == 'rock' && computerSelection == 'scissors')) {
-        playerScore++;
-        return console.log(`You are victorious! ${playerSelection[0].toUpperCase()}${playerSelection.slice(1)} beats ${computerSelection}. Score is ${playerScore} to ${computerScore}.`);
+    if (playerSelection === computerSelection) {
+        roundTie(playerScore, computerScore);
+    } else if ((playerSelection === 'scissors' && computerSelection === 'paper') ||
+               (playerSelection === 'paper' && computerSelection === 'rock') ||
+               (playerSelection === 'rock' && computerSelection === 'scissors')) {
+        roundWin(playerSelection, playerSelection_div);
      } else {
-        computerScore++;
-        return console.log(`You lose. ${computerSelection[0].toUpperCase()}${computerSelection.slice(1)} beats ${playerSelection}. Score is ${playerScore} to ${computerScore}.`);
+        roundLoss(playerSelection, playerSelection_div);
     }
+}
+
+function roundTie(playerScore, computerScore) {
+    result_div.innerHTML= `It\'s a tie! Score is ${playerScore} to ${computerScore}.`;
+    checkGameOver(playerScore, computerScore);
+}
+
+function roundWin(playerSelection, playerSelection_div) {
+    playerScore++;
+    playerScore_span.innerHTML = playerScore;
+    result_div.innerHTML= `You are victorious! ${playerSelection[0].toUpperCase()}${playerSelection.slice(1)} beats ${computerSelection}. Score is ${playerScore} to ${computerScore}.`;
+    document.getElementById(playerSelection).classList.add('win');
+    setTimeout(() => playerSelection_div.classList.remove('win'), 1000);
+    checkGameOver(playerScore, computerScore);
+}
+
+function roundLoss(playerSelection, playerSelection_div) {
+    computerScore++;
+    computerScore_span.innerHTML = computerScore; 
+    result_div.innerHTML= `You lose. ${computerSelection[0].toUpperCase()}${computerSelection.slice(1)} beats ${playerSelection}. Score is ${playerScore} to ${computerScore}.`;
+    document.getElementById(playerSelection).classList.add('loss');
+    setTimeout(() => playerSelection_div.classList.remove('loss'), 1000);
+    checkGameOver(playerScore, computerScore);
 }
 
 function checkGameOver(playerScore, computerScore) {
     //declare final winner
-   if (playerScore == 5 || computerScore == 5) {
-        if (playerScore == 5) {
-            return console.log('You win! Humanity lives to fight another day.');
+   if (playerScore === 5 || computerScore === 5) {
+        if (playerScore === 5) {
+            result_div.innerHTML = 'Game Over - You Win! Humanity lives to fight another day.';
         } else {
-            return console.log('You lose! Who will save us from the computers now?');
+            result_div.innerHTML = 'Game Over - You Lose! Who will save us from the computers now?';
        }
     }
     return;
