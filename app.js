@@ -1,16 +1,17 @@
 //get reference to HTML body & buttons, initialize score & declare game options
 const playerScore_span = document.getElementById('player-score');
 const computerScore_span = document.getElementById('computer-score');
-const buttons_div = document.querySelectorAll('button');
+const btn_div = document.querySelectorAll('button');
+const btn_container = document.getElementById('btn-container');
 const result_div = document.querySelector('#result');
 let playerScore = 0;
 let computerScore = 0;
 const rps = ['rock', 'paper', 'scissors'];
 
 //initiate round via onclick listener
-buttons_div.forEach(button => {
-    button.addEventListener('click', () => {
-        let playerSelection = button.getAttribute('id');
+btn_div.forEach(btn => {
+    btn.addEventListener('click', () => {
+        let playerSelection = btn.getAttribute('id');
         playRound(playerSelection);
     });
 });
@@ -65,10 +66,20 @@ function checkGameOver(playerScore, computerScore) {
     //declare final winner
    if (playerScore === 5 || computerScore === 5) {
         if (playerScore === 5) {
+            result_div.style.fontSize = '100px';
             result_div.innerHTML = 'Game Over - You Win! Humanity lives to fight another day.';
+            btn_container.innerHTML = '';
+            setTimeout(endGame, 5000);
         } else {
+            result_div.style.fontSize = '100px';
             result_div.innerHTML = 'Game Over - You Lose! Who will save us from the computers now?';
+            btn_container.innerHTML = '';
+            setTimeout(endGame, 5000);
        }
     }
     return;
+}
+
+function endGame() {
+    window.location.reload();
 }
